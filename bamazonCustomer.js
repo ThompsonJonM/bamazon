@@ -137,7 +137,7 @@ function selectProduct(cb) {
 
                                     {
                                         name: 'cart',
-                                        type: 'checkbox',
+                                        type: 'list',
                                         message: 'Would you like to place this item into your cart?',
                                         choices: ['Yes', 'No, Keep Shopping']
                                     }
@@ -145,6 +145,23 @@ function selectProduct(cb) {
                                 ]).then(function(choice) {
                                     if (choice.cart === 'Yes') {
                                         console.log('Item placed into your cart!');
+
+                                        inquirer.prompt([
+
+                                            {
+                                                name: 'checkOut',
+                                                type: 'list',
+                                                message: 'Would you like to check out?',
+                                                choices: ['Yes', 'No, keep shopping']
+                                            }
+
+                                        ]).then(function(check) {
+                                            if (check.checkOut === 'Yes') {
+                                                checkOut();
+                                            } else {
+                                                selectProduct(cb);
+                                            }
+                                        })
 
                                     } else if (choice.cart === 'No, Keep Shopping') {
                                         selectProduct(cb);
@@ -206,7 +223,7 @@ function selectProduct(cb) {
 
                                     {
                                         name: 'cart',
-                                        type: 'checkbox',
+                                        type: 'list',
                                         message: 'Would you like to place this item into your cart?',
                                         choices: ['Yes', 'No, Keep Shopping']
                                     }
@@ -214,6 +231,23 @@ function selectProduct(cb) {
                                 ]).then(function(choice) {
                                     if (choice.cart === 'Yes') {
                                         console.log('Item placed into your cart!');
+
+                                        inquirer.prompt([
+
+                                            {
+                                                name: 'checkOut',
+                                                type: 'list',
+                                                message: 'Would you like to check out?',
+                                                choices: ['Yes', 'No, keep shopping']
+                                            }
+
+                                        ]).then(function(check) {
+                                            if (check.checkOut === 'Yes') {
+                                                checkOut();
+                                            } else {
+                                                selectProduct(cb);
+                                            }
+                                        })
 
                                     } else if (choice.cart === 'No, Keep Shopping') {
                                         selectProduct(cb);
@@ -231,4 +265,8 @@ function selectProduct(cb) {
             })
         }
     })
+}
+
+function checkOut() {
+    
 }

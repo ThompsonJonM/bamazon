@@ -78,40 +78,50 @@ function displayProduct(cb) {
 }
 
 function selectProduct(cb) {
-    inquirer.prompt([
-        {
-            name: 'item_id',
-            type: 'input',
-            message: 'Enter the Product ID you wish to purchase',
-        },
-        {
-            name: 'quantity',
-            type: 'input',
-            message: 'Enter the quantity wou wish to purchase'
+    var items = [];
+
+    connection.query('select * from products', function(err, res) {
+        if (err) throw err;
+        for (var i = 0; i < res.length; i++) {
+            items.push(res[i].product_name)
         }
-    ]).then(function(input) {
-        var item = input.item_id;
-        var quantity = input.quantity;
 
-        var queryReq = 'select * from products where ?';
+        inquirer.prompt([
+            {
+                name: 'product_name',
+                type: 'list',
+                message: 'Please select the product you wish to purchase',
+                choices: items
+            },
+            {
+                name: 'quantity',
+                type: 'input',
+                message: 'Enter the quantity you wish to purchase'
+            }
+        ]).then(function(input) {
+            var item = input.product_name;
+            var quantity = input.quantity;
 
-        connection.query(queryReq, {item_id: item}, 
-            function(err, data) {
-                if (err) throw err;
-                if (data.length === 0) {
-                    console.log('Please enter a valid Product ID');
-                    displayProduct(cb);
-                } else {
-                    var productData = data[0];
+            var queryReq = 'select * from products where ?';
 
-                    if (quantity <= productData.stock_quantity) {
-                        console.log('The requested item is in stock.');
+            connection.query(queryReq, {product_name: item}, 
+                function(err, data) {
+                    if (err) throw err;
+                    if (data.length === 0) {
+                        console.log('Please enter a valid Product ID');
+                        bamazonCustomer(cb);
                     } else {
-                        console.log('Insufficient quantity. Your order cannot be placed at this time.');
-                        console.log('Please select a new quantity or another item.');
-                        displayProduct(cb);
+                        var productData = data[0];
+
+                        if (quantity <= productData.stock_quantity) {
+                            console.log('The requested item is in stock.');
+                        } else {
+                            console.log('Insufficient quantity. Your order cannot be placed at this time.');
+                            console.log('Please select a new quantity or another item.');
+                            selectProduct(cb);
+                        }
                     }
-                }
-            })
+                })
+        })
     })
 }

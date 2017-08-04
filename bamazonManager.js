@@ -57,3 +57,21 @@ function bamazonManager() {
         }
     });
 }
+
+function viewProducts(cb) {
+    var table = new Table({
+        head: ['Product ID', 'Product Name', 'Department', 'Price', 'Quantity On Hand']
+    });
+
+    connection.query('select * from products', 
+        function(err, res) {
+            if (err) throw err;
+            for (var i = 0; i < res.length; i++) {
+                table.push([res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]);
+            }
+
+            console.log(table.toString());
+
+            cb();
+        });
+}

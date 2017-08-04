@@ -78,50 +78,119 @@ function displayProduct(cb) {
 }
 
 function selectProduct(cb) {
-    var items = [];
 
-    connection.query('select * from products', function(err, res) {
-        if (err) throw err;
-        for (var i = 0; i < res.length; i++) {
-            items.push(res[i].product_name)
+    inquirer.prompt([
+
+        {
+            name: 'route',
+            type: 'list',
+            message: 'Please select how you would like to search for a product.',
+            choices: ['Product ID', 'Product Name']
         }
 
-        inquirer.prompt([
-            {
-                name: 'product_name',
-                type: 'list',
-                message: 'Please select the product you wish to purchase',
-                choices: items
-            },
-            {
-                name: 'quantity',
-                type: 'input',
-                message: 'Enter the quantity you wish to purchase'
-            }
-        ]).then(function(input) {
-            var item = input.product_name;
-            var quantity = input.quantity;
+    ]).then(function(user) {
+        var items = [];
 
-            var queryReq = 'select * from products where ?';
+        if (user.route === 'Product Name') {
 
-            connection.query(queryReq, {product_name: item}, 
-                function(err, data) {
+            connection.query('select product_name from products', 
+                function(err, res) {
                     if (err) throw err;
-                    if (data.length === 0) {
-                        console.log('Please enter a valid Product ID');
-                        bamazonCustomer(cb);
-                    } else {
-                        var productData = data[0];
-
-                        if (quantity <= productData.stock_quantity) {
-                            console.log('The requested item is in stock.');
-                        } else {
-                            console.log('Insufficient quantity. Your order cannot be placed at this time.');
-                            console.log('Please select a new quantity or another item.');
-                            selectProduct(cb);
-                        }
+                    for (var i = 0; i < res.length; i++) {
+                        items.push(res[i].product_name)
                     }
+
+                    inquirer.prompt([
+
+                        {
+                            name: 'product_name',
+                            type: 'list',
+                            message: 'Please select the product you wish to purchase',
+                            choices: items
+                        },
+
+                        {
+                            name: 'quantity',
+                            type: 'input',
+                            message: 'Enter the quantity you wish to purchase'
+                        }
+
+            ]).then(function(input) {
+                var item = input.product_name;
+                var quantity = input.quantity;
+
+                var queryReq = 'select * from products where ?';
+
+                connection.query(queryReq, {product_name: item}, 
+                    function(err, data) {
+                        if (err) throw err;
+                        if (data.length === 0) {
+                            console.log('Please enter a valid Product Name');
+                            bamazonCustomer(cb);
+                        } else {
+                            var productData = data[0];
+
+                            if (quantity <= productData.stock_quantity) {
+                                console.log('The requested item is in stock.');
+                            } else {
+                                console.log('Insufficient quantity. Your order cannot be placed at this time.');
+                                console.log('Please select a new quantity or another item.');
+                                selectProduct(cb);
+                            }
+                        }
+                    })
                 })
-        })
+            })
+
+        } else if (user.route === 'Product ID') {
+
+            connection.query('select item_id from products', 
+                function(err, res) {
+                    if (err) throw err;
+                    for (var i = 0; i < res.length; i++) {
+                        items.push(res[i].item_id)
+                    }
+
+                    inquirer.prompt([
+
+                        {
+                            name: 'item_id',
+                            type: 'input',
+                            message: 'Enter the product ID you wish to purchase'
+                        },
+
+                        {
+                            name: 'quantity',
+                            type: 'input',
+                            message: 'Enter the quantity you wish to purchase'
+                        }
+
+            ]).then(function(input) {
+                var item = input.item_id;
+                var quantity = input.quantity;
+
+                var queryReq = 'select * from products where ?';
+
+                connection.query(queryReq, {item_id: item}, 
+                    function(err, data) {
+                        if (err) throw err;
+                        if (data.length === 0) {
+                            console.log('Please enter a valid Product ID');
+                            bamazonCustomer(cb);
+                        } else {
+                            var productData = data[0];
+
+                            if (quantity <= productData.stock_quantity) {
+                                console.log('The requested item is in stock.');
+                            } else {
+                                console.log('Insufficient quantity. Your order cannot be placed at this time.');
+                                console.log('Please select a new quantity or another item.');
+                                selectProduct(cb);
+                            }
+                        }
+                    })
+                })
+            })
+        }
     })
 }

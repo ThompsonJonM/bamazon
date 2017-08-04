@@ -132,10 +132,29 @@ function selectProduct(cb) {
 
                             if (quantity <= productData.stock_quantity) {
                                 console.log('The requested item is in stock.');
+
+                                inquirer.prompt([
+
+                                    {
+                                        name: 'cart',
+                                        type: 'checkbox',
+                                        message: 'Would you like to place this item into your cart?',
+                                        choices: ['Yes', 'No, Keep Shopping']
+                                    }
+
+                                ]).then(function(choice) {
+                                    if (choice.cart === 'Yes') {
+                                        console.log('Item placed into your cart!');
+
+                                    } else if (choice.cart === 'No, Keep Shopping') {
+                                        selectProduct(cb);
+                                    }
+                                })
+
                             } else {
                                 console.log('Insufficient quantity. Your order cannot be placed at this time.');
                                 console.log('Please select a new quantity or another item.');
-                                selectProduct(cb);
+                                bamazonCustomer(cb);
                             }
                         }
                     })
@@ -182,6 +201,25 @@ function selectProduct(cb) {
 
                             if (quantity <= productData.stock_quantity) {
                                 console.log('The requested item is in stock.');
+
+                                inquirer.prompt([
+
+                                    {
+                                        name: 'cart',
+                                        type: 'checkbox',
+                                        message: 'Would you like to place this item into your cart?',
+                                        choices: ['Yes', 'No, Keep Shopping']
+                                    }
+
+                                ]).then(function(choice) {
+                                    if (choice.cart === 'Yes') {
+                                        console.log('Item placed into your cart!');
+
+                                    } else if (choice.cart === 'No, Keep Shopping') {
+                                        selectProduct(cb);
+                                    }
+                                })
+
                             } else {
                                 console.log('Insufficient quantity. Your order cannot be placed at this time.');
                                 console.log('Please select a new quantity or another item.');

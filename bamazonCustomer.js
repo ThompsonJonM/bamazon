@@ -17,11 +17,39 @@ connection.connect (function(err) {
     if (err) throw err;
 
     console.log("Connected as " + connection.threadId);
-    displayProduct();
+    bamazonCustomer();
 });
 
+function bamazonCustomer() {
+    inquirer.prompt([
+        {
+            name: 'choose',
+            type: 'list',
+            message: 'Welcome new customer',
+            choices: ['View Products', 'Buy Products', 'Exit']
+        }
+    ]).then(function(user){
+        console.log(user.choose);
+        switch(user.choose) {
+            case 'View Products':
+                displayProduct(function() {
+                    bamazonCustomer();
+                });
+            break;
+
+            case 'Buy Products':
+                
+            break;
+
+            case 'Exit':
+                connection.end();
+            break;
+        }
+    })
+}
+
 // Display function
-function displayProduct() {
+function displayProduct(cb) {
     var table = new Table({
         head: ['Product ID', 'Product Name', 'Department', 'Price', 'Quantity']
     });
@@ -40,3 +68,4 @@ function displayProduct() {
             cb();
         });
 }
+

@@ -25,7 +25,7 @@ function bamazonManager() {
             name: 'choose',
             type: 'list',
             message: 'Manager Interface',
-            choices: ['View Products', 'Add Quantity to Inventory', 'Add New Product', 'Exit']
+            choices: ['View Products', 'View Low Inventory', 'Add to Inventory', 'Add New Product', 'Exit']
         }
     ]).then(function(user) {
         console.log(user.choose);
@@ -36,8 +36,14 @@ function bamazonManager() {
                 });
             break;
 
-            case 'Add Quantity to Inventory':
-                addQuantity();
+            case 'View Low Inventory':
+                viewLowInventory(function() {
+                    bamazonManager();
+                });
+            break;
+
+            case 'Add to Inventory':
+                addInventoryy();
             break;
 
             case 'Add New Product':

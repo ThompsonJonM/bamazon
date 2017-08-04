@@ -8,6 +8,9 @@
     + This should install the following packages:
         - Inquirer
         - MySQL
+        - Cli-Table
 
 # Running the Application
-- Type "node bamazon" to access the application
+- Type "node bamazonCustomer" to access the consumer application
+- Type "node bamazonManager" to access the management application
+- Type "node bamazonDepartment" to access the executive application

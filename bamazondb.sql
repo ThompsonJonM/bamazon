@@ -1,4 +1,4 @@
-create database bamazonbd;
+create database bamazondb;
 
 use bamazondb;
 

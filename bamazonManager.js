@@ -72,6 +72,8 @@ function viewProducts(cb) {
 
             console.log(table.toString());
 
+            // Allows manager to continue using UI after entry
+            // More user friendly than ctl-C
             cb();
         });
 }

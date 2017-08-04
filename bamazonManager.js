@@ -60,7 +60,7 @@ function bamazonManager() {
 
 function viewProducts(cb) {
     var table = new Table({
-        head: ['Product ID', 'Product Name', 'Department', 'Price', 'Quantity On Hand']
+        head: ['Product ID', 'Product Name', 'Department', 'Price', 'Quantity']
     });
 
     connection.query('select * from products', 

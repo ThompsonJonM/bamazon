@@ -12,6 +12,9 @@ var connection = mysql.createConnection ({
     database: 'bamazondb',
 });
 
+// Globals
+var bamazonCart = [];
+
 // Connection functions
 connection.connect (function(err) {
     if (err) throw err;
@@ -132,6 +135,7 @@ function selectProduct(cb) {
 
                             if (quantity <= productData.stock_quantity) {
                                 console.log('The requested item is in stock.');
+                                // console.log(item, quantity);
 
                                 inquirer.prompt([
 
@@ -145,6 +149,7 @@ function selectProduct(cb) {
                                 ]).then(function(choice) {
                                     if (choice.cart === 'Yes') {
                                         console.log('Item placed into your cart!');
+                                        // console.log(item, quantity);
 
                                         inquirer.prompt([
 
@@ -157,7 +162,9 @@ function selectProduct(cb) {
 
                                         ]).then(function(check) {
                                             if (check.checkOut === 'Yes') {
-                                                checkOut();
+                                                bamazonCart.push({item, quantity});
+                                                // console.log(bamazonCart);
+                                                checkOut(item, quantity);
                                             } else {
                                                 selectProduct(cb);
                                             }
@@ -243,6 +250,8 @@ function selectProduct(cb) {
 
                                         ]).then(function(check) {
                                             if (check.checkOut === 'Yes') {
+                                                bamazonCart.push({item, quantity});
+                                                // console.log(bamazonCart);
                                                 checkOut(item, quantity);
                                             } else {
                                                 selectProduct(cb);
@@ -268,8 +277,8 @@ function selectProduct(cb) {
 }
 
 function checkOut() {
-    connection.query('update products set stock_quantity = ' + quantity + ' where item_id = ' + 'item_id = ' + item, function(err, res) {
+    connection.query('update products set stock_quantity = ' + bamazonCart.quantity + ' where item_id = ' + bamazonCart.item, function(err, res) {
         if (err) throw err;
-        console.log('Purchased ' + quantity + ' of ' + item);
+        console.log('Purchased ' + bamazonCart.quantity + ' of ' + bamazonCart.item);
     });
 }

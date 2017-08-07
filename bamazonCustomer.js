@@ -119,12 +119,12 @@ function selectProduct(cb) {
                         }
 
             ]).then(function(input) {
-                var item = input.product_name;
-                var quantity = input.quantity;
+                var itemName = input.product_name;
+                var itemQuantity = input.quantity;
 
                 var queryReq = 'select * from products where ?';
 
-                connection.query(queryReq, {product_name: item}, 
+                connection.query(queryReq, {product_name: itemName}, 
                     function(err, data) {
                         if (err) throw err;
                         if (data.length === 0) {
@@ -133,7 +133,7 @@ function selectProduct(cb) {
                         } else {
                             var productData = data[0];
 
-                            if (quantity <= productData.stock_quantity) {
+                            if (itemQuantity <= productData.stock_quantity) {
                                 console.log('The requested item is in stock.');
                                 // console.log(item, quantity);
 
@@ -149,7 +149,7 @@ function selectProduct(cb) {
                                 ]).then(function(choice) {
                                     if (choice.cart === 'Yes') {
                                         console.log('Item placed into your cart!');
-                                        // console.log(item, quantity);
+                                        console.log(itemQuantity, itemName);
 
                                         inquirer.prompt([
 
@@ -162,9 +162,11 @@ function selectProduct(cb) {
 
                                         ]).then(function(check) {
                                             if (check.checkOut === 'Yes') {
-                                                bamazonCart.push({item, quantity});
-                                                // console.log(bamazonCart);
-                                                checkOut(item, quantity);
+                                                bamazonCart.push({
+                                                    cartQuantity: itemQuantity,
+                                                    cartName: itemName});
+                                                console.log(bamazonCart);
+                                                checkOutName(bamazonCart.cartQuantity, bamazonCart.cartName);
                                             } else {
                                                 selectProduct(cb);
                                             }
@@ -209,12 +211,12 @@ function selectProduct(cb) {
                         }
 
             ]).then(function(input) {
-                var item = input.item_id;
-                var quantity = input.quantity;
+                var itemId = input.item_id;
+                var itemQuantity = input.quantity;
 
                 var queryReq = 'select * from products where ?';
 
-                connection.query(queryReq, {item_id: item}, 
+                connection.query(queryReq, {item_id: itemId}, 
                     function(err, data) {
                         if (err) throw err;
                         if (data.length === 0) {
@@ -223,7 +225,7 @@ function selectProduct(cb) {
                         } else {
                             var productData = data[0];
 
-                            if (quantity <= productData.stock_quantity) {
+                            if (itemQuantity <= productData.stock_quantity) {
                                 console.log('The requested item is in stock.');
 
                                 inquirer.prompt([
@@ -250,9 +252,9 @@ function selectProduct(cb) {
 
                                         ]).then(function(check) {
                                             if (check.checkOut === 'Yes') {
-                                                bamazonCart.push({item, quantity});
+                                                bamazonCart.push({itemQuantity, itemId});
                                                 // console.log(bamazonCart);
-                                                checkOut(item, quantity);
+                                                checkOutId(itemQuantity, itemId);
                                             } else {
                                                 selectProduct(cb);
                                             }
@@ -276,9 +278,18 @@ function selectProduct(cb) {
     })
 }
 
-function checkOut() {
-    connection.query('update products set stock_quantity = ' + bamazonCart.quantity + ' where item_id = ' + bamazonCart.item, function(err, res) {
+function checkOutName() {
+    connection.query('update products set stock_quantity = stock_quantity - ' + bamazonCart.cartQuantity + 'where product_name = ' + bamazonCart.cartName, function(err, res) {
         if (err) throw err;
-        console.log('Purchased ' + bamazonCart.quantity + ' of ' + bamazonCart.item);
+        // console.log('Purchased ' + bamazonCart.quantity + ' of ' + bamazonCart.item);
     });
 }
+
+// function checkOutId() {
+//     connection.query('update products set ? where ?' [{bamazonCart.quantity, function(err, res) {
+//         if (err) throw err;
+
+
+//         console.log('Purchased ' + bamazonCart.quantity + ' of ' + bamazonCart.item);
+//     });
+// }

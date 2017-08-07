@@ -243,7 +243,7 @@ function selectProduct(cb) {
 
                                         ]).then(function(check) {
                                             if (check.checkOut === 'Yes') {
-                                                checkOut();
+                                                checkOut(id, quantity);
                                             } else {
                                                 selectProduct(cb);
                                             }
@@ -268,5 +268,8 @@ function selectProduct(cb) {
 }
 
 function checkOut() {
-    
+    connection.query('update products set stock_quantity = ' + quantity + ' where item_id = ' + 'item_id = ' + item, function(err, res) {
+        if (err) throw err;
+        console.log('Purchased ' + quantity + ' of ' + item);
+    });
 }

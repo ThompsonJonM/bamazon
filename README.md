@@ -17,18 +17,18 @@
 
 ## Bamazon in Use
 
-![Image](./assets/images/bamazonStart)
+![Image](./assets/images/bamazonStart.png)
 
-![Image](./assets/images/bamazonView)
+![Image](./assets/images/bamazonView.png)
 
-![Image](./assets/images/bamazonBuy)
+![Image](./assets/images/bamazonBuy.png)
 
-![Image](./assets/images/bamazonBuyName)
+![Image](./assets/images/bamazonBuyName.png)
 
-![Image](./assets/images/bamazonBuyId)
+![Image](./assets/images/bamazonBuyId.png)
 
-![Image](./assets/images/bamazonBuyQty)
+![Image](./assets/images/bamazonBuyQty.png)
 
-![Image](./assets/images/bamazonCart)
+![Image](./assets/images/bamazonCart.png)
 
-![Image](./assets/images/bamazonCartCheck)
+![Image](./assets/images/bamazonCartCheck.png)

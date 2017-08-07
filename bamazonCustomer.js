@@ -243,7 +243,7 @@ function selectProduct(cb) {
 
                                         ]).then(function(check) {
                                             if (check.checkOut === 'Yes') {
-                                                checkOut(id, quantity);
+                                                checkOut(item, quantity);
                                             } else {
                                                 selectProduct(cb);
                                             }
